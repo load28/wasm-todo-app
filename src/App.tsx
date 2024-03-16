@@ -1,36 +1,18 @@
 import './App.css'
-import {invoke} from '@tauri-apps/api/tauri'
-import {useState} from "react";
-
+import {TodoItem} from "./components/TodoItem.tsx";
+import {useTodoStore} from "./store/TodoStore.ts";
+import {Typography} from "@mui/material";
 
 function App() {
-    const [data, setData] = useState<any>([]);
-
-    const load = async () => {
-        const res = await invoke('get_todos')
-        console.log(res)
-        setData(res);
-    }
-
-    const addData = async () => {
-        await invoke('add_todo', {id: (data.length || 0) + 1, title: 'Hello'})
-    }
-
-    const reset = async () => {
-        setData([]);
-        await invoke('reset_todos');
-    }
+    const list = useTodoStore((state) => state.todoList)
+    const completed = list.filter((todo) => todo.checked).length;
 
     return (
         <>
-            <button onClick={() => load()}>Load</button>
-            <button type="button" onClick={() => addData()}>Add</button>
-            <button type="button" onClick={() => reset()}>Rest</button>
-            <ul>
-                {data.map((item: any) => (
-                    <li key={item.id}>{item.title}</li>
-                ))}
-            </ul>
+            <Typography variant="h5">
+                completed: {completed}
+            </Typography>
+            {list.map((todo) => <TodoItem key={todo.id} todo={todo}/>)}
         </>
     )
 }
