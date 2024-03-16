@@ -1,0 +1,11 @@
+.todo-item {
+    border-radius: 5px;
+
+    &:not(:last-child) {
+        margin-bottom: 2px;
+    }
+}
+
+.todo-item:hover {
+    background-color: antiquewhite;
+}
